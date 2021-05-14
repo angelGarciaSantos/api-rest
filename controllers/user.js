@@ -7,7 +7,8 @@ function signUp (req, res) {
     const user = new User ({
         email: req.body.email, 
         displayName: req.body.displayName,
-        password: req.body.password
+        password: req.body.password,
+        admin: false
     })
 
     user.avatar = user.gravatar();
