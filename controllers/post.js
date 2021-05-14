@@ -32,6 +32,7 @@ function savePost (req, res) {
     post.title = req.body.title
     post.content = req.body.content
     post.user = req.body.user
+    post.userId = req.user
     post.date = date
 
     post.save((err, postStored) => {
@@ -54,10 +55,15 @@ function updatePost (req, res) {
 
 function deletePost (req, res) {
     let postId = req.params.postId
+    let userId = req.user
+
+
 
     Post.findById(postId, (err, post) => {
         if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
         
+        if (post.userId != userId) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${err}`})
+
         post.remove(err => {
             if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
             res.status(200).send({ message: 'El producto ha sido eliminado' })

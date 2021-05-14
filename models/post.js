@@ -7,6 +7,7 @@ const PostSchema = Schema({
     title: String,
     content: String, 
     user: String,
+    userId: String,
     date: Date, 
 })
 
