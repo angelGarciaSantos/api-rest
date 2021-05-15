@@ -63,6 +63,7 @@ function deletePost (req, res) {
     User.findById(userId), (err, user) => {
         if (err)  return  res.status(500).send({message: `Error accediendo al usuario al borrar el tema: ${err}`})
 
+        console.log(user);
         isUserAdmin = user.admin;
     }
 
