@@ -59,17 +59,18 @@ function deletePost (req, res) {
     let postId = req.params.postId
     let userId = req.user
     let isUserAdmin = false;
+    let reqUser = {};
 
     User.findById(userId), (err, user) => {
         if (err)  return  res.status(500).send({message: `Error accediendo al usuario al borrar el tema: ${err}`})
 
-        console.log(user);
         isUserAdmin = user.admin;
+        reqUser = user;
     }
 
     Post.findById(postId, (err, post) => {
         if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
-        if (!(isUserAdmin) && (post.userId != userId)) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${isUserAdmin}`})
+        if (!(isUserAdmin) && (post.userId != userId)) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${reqUser}`})
 
         post.remove(err => {
             if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
