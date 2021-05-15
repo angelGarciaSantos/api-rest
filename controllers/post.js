@@ -1,7 +1,6 @@
 'use strict'
 
 const Post = require('../models/post')
-const user = require('../models/user')
 const User = require('../models/user')
 
 function getPost (req, res) {
