@@ -57,42 +57,16 @@ function updatePost (req, res) {
 function deletePost (req, res) {
     let postId = req.params.postId
     let userId = req.user
-    let isUserAdmin = false;
-    let reqUser = {};
 
-    // User.findById(userId), (err, user) => {
-    //     if (err)  return  res.status(500).send({message: `Error accediendo al usuario al borrar el tema: ${err}`})
+    Post.findById(postId, (err, post) => {
+        if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
+        if (post.userId != userId) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${reqUser.displayName}`})
 
-    //     isUserAdmin = user.admin;
-    //     reqUser = user;
-
-    //     Post.findById(postId, (err, post) => {
-    //         if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
-    //         if (!(isUserAdmin) && (post.userId != userId)) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${reqUser.displayName}`})
-    
-    //         post.remove(err => {
-    //             if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
-    //             res.status(200).send({ message: 'El producto ha sido eliminado' })
-    //         })
-    //     })
-    // }
-
-    User.findById(userId).then(user => {
-        if (err)  return  res.status(500).send({message: `Error accediendo al usuario al borrar el tema: ${err}`})
-
-        isUserAdmin = user.admin;
-        reqUser = user;
-
-        Post.findById(postId, (err, post) => {
+        post.remove(err => {
             if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
-            if (!(isUserAdmin) && (post.userId != userId)) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${reqUser.displayName}`})
-    
-            post.remove(err => {
-                if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
-                res.status(200).send({ message: 'El producto ha sido eliminado' })
-            })
+            res.status(200).send({ message: 'El producto ha sido eliminado' })
         })
-    })    
+    })
 }
 
 module.exports = {
