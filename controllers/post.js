@@ -65,17 +65,19 @@ function deletePost (req, res) {
 
         isUserAdmin = user.admin;
         reqUser = user;
+
+        Post.findById(postId, (err, post) => {
+            if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
+            if (!(isUserAdmin) && (post.userId != userId)) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${reqUser.displayName}`})
+    
+            post.remove(err => {
+                if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
+                res.status(200).send({ message: 'El producto ha sido eliminado' })
+            })
+        })
     }
 
-    Post.findById(postId, (err, post) => {
-        if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
-        if (!(isUserAdmin) && (post.userId != userId)) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${reqUser.admin} ${reqUser.displayName}`})
-
-        post.remove(err => {
-            if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
-            res.status(200).send({ message: 'El producto ha sido eliminado' })
-        })
-    })
+    
 }
 
 module.exports = {
