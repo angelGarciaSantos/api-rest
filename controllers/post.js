@@ -58,6 +58,7 @@ function deletePost (req, res) {
     let postId = req.params.postId
     let userId = req.user
 
+    
     Post.findById(postId, (err, post) => {
         if (err)  return  res.status(500).send({message: `Error al borrar el tema: ${err}`})
         if (post.userId != userId) return  res.status(403).send({message: `No estas autorizado para borrar el tema: ${reqUser.displayName}`})
